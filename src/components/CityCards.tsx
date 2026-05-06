@@ -1,1 +1,5 @@
-import HomePage from "./HomePage";
+const CityCards = () => {
+  return null;
+};
+
+export default CityCards;
