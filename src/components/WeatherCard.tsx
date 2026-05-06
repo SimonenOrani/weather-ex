@@ -1,4 +1,3 @@
-import React from 'react';
 import { CloudRain, CloudSun, Cloudy, Snowflake, Sun, Wind, Droplets, Zap, Activity } from "lucide-react";
 
 interface WeatherProps {
