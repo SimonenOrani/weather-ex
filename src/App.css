@@ -3,124 +3,134 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  /* Gradiente moderno per far risaltare l'effetto vetro */
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(circle at top right, #1e3c72, #121721);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: white;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  color: white;
 }
 
 /* 2. Container Principale */
 .weather-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
+  width: 90%;
+  max-width: 1100px;
+  margin: 60px auto;
   text-align: center;
 }
 
-/* 3. Griglia per "Altre Città" (3 COLONNE) */
+/* 3. Griglia Altre Città */
 .cities-grid {
-  display: grid !important;
-  /* Forza 3 colonne su schermi grandi */
-  grid-template-columns: repeat(3, 1fr) !important; 
-  gap: 25px !important;
-  margin-top: 30px !important;
-  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 40px;
 }
 
-/* 4. Stile della Card (Vetro Sfocato) */
+/* 4. Stile Card Professionale */
 .weather-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .weather-card:hover {
-  transform: translateY(-10px);
-  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* 5. Titoli e Icone */
+/* 5. Typography */
 .weather-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  letter-spacing: -0.5px;
+}
+
+.temp-display {
+  font-size: 3.5rem;
+  font-weight: 800;
   margin: 10px 0;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  background: linear-gradient(to bottom, #fff, #ccc);
+  /* Compatibilità Standard ed Estesa */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Fallback per browser che non supportano il testo gradiente */
+  color: #fff;
 }
 
-.weather-container svg {
-  height: 65px;
-  width: 65px;
-  margin: 15px 0;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
-}
-
-/* 6. Griglia Dettagli Interni (Umidità, Vento, UV, Aria) */
+/* 6. Dettagli (Griglia 2x2) */
 .weather-details {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 20px;
+  gap: 12px;
   width: 100%;
+  margin-top: 25px;
 }
 
-/* 7. Box dei Dati Singoli */
 .weather-data {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 12px;
-  margin: 0;
-  font-size: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 15px 10px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: 4px;
 }
 
-/* 8. Pulsanti e Link di Navigazione */
-a {
+.weather-data span:first-child {
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  font-weight: 700;
   color: #00d4ff;
+  letter-spacing: 1px;
+}
+
+/* 7. Icone */
+.weather-icon {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
+}
+
+/* 8. Navigazione */
+a {
+  color: white;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1rem;
-  padding: 10px 25px;
-  border: 2px solid #00d4ff;
-  border-radius: 50px;
-  transition: all 0.3s;
-  display: inline-block;
-  margin-bottom: 25px;
+  font-weight: 600;
+  padding: 12px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
 }
 
 a:hover {
-  background: #00d4ff;
-  color: #1e3c72;
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+  background: #fff;
+  color: #121721;
 }
 
-/* 9. Responsive Design */
-@media (max-width: 1024px) {
+/* Responsive */
+@media (max-width: 900px) {
   .cities-grid {
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 colonne su tablet */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .cities-grid {
-    grid-template-columns: 1fr !important; /* 1 colonna su smartphone */
-  }
-  .weather-card {
-    padding: 1.5rem;
+    grid-template-columns: 1fr;
   }
 }

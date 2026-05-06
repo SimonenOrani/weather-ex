@@ -1,67 +1,68 @@
-import { CloudRain, CloudSun, Cloudy, Snowflake, Sun } from "lucide-react";
+import { CloudRain, CloudSun, Cloudy, Snowflake, Sun, Wind, Droplets, Zap, Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 import { API_KEY, BaseUrl } from "../constants";
 import { Link } from "react-router-dom";
 
-const city = "Sassari";
+const CITY = "Sassari";
 
 export const HomePage = () => {
-  const [weather, setWeather] = useState<any | null>(null);
-  const [temp, setTemp] = useState<any | null>(null);
-  const [humidity, setHumidity] = useState<any | null>(null);
-  const [wind, setWind] = useState<any | null>(null);
-  const [UV, setUV] = useState<any | null>(null);
-  const [aqi, setAqi] = useState<any | null>(null);
-
-  const fetchWeather = async () => {
-    try {
-      const url = `${BaseUrl}/current.json?key=${API_KEY}&q=${city}&aqi=yes`;
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      setWeather(data.current.condition.code);
-      setTemp(data.current.temp_c);
-      setHumidity(data.current.humidity);
-      setWind(data.current.wind_kph);
-      setUV(data.current.uv);
-      setAqi(data.current.air_quality["us-epa-index"]);
-    } catch (error) {
-      console.error("Errore nel caricamento dati:", error);
-    }
-  };
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const url = `${BaseUrl}/current.json?key=${API_KEY}&q=${CITY}&aqi=yes`;
+        const response = await fetch(url);
+        const resData = await response.json();
+        setData(resData);
+      } catch (error) {
+        console.error("Errore:", error);
+      }
+    };
     fetchWeather();
   }, []);
 
-  function getAQI(qualitaAria: number) {
-    const levels: { [key: number]: string } = {
-      1: "Buona", 2: "Moderata", 3: "Malsana (sensibili)", 
-      4: "Malsana", 5: "Molto malsana", 6: "Pericolosa"
-    };
-    return levels[qualitaAria] || "N/A";
+  function getConditionIcon(code: number) {
+    const props = { className: "weather-icon", size: 100 };
+    if (code === 1000) return <Sun {...props} color="#FFD700" />;
+    if (code === 1003) return <CloudSun {...props} color="#F0E68C" />;
+    if ([1006, 1009, 1030].includes(code)) return <Cloudy {...props} color="#B0C4DE" />;
+    if ([1063, 1183, 1189, 1240].includes(code)) return <CloudRain {...props} color="#00BFFF" />;
+    return <Snowflake {...props} color="#AFEEEE" />;
   }
 
-  function getCondition(condizione: number) {
-    if (condizione === 1000) return <Sun />;
-    if (condizione === 1003) return <CloudSun />;
-    if ([1006, 1009, 1030, 1135, 1147].includes(condizione)) return <Cloudy />;
-    if ([1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1240, 1243, 1246].includes(condizione)) return <CloudRain />;
-    return <Snowflake />;
-  }
+  if (!data) return <div className="weather-container">Caricamento meteo...</div>;
 
   return (
     <div className="weather-container">
-      <Link to="/other-cities">Vedi le altre città</Link>
-      <div className="weather-card">
-        <h1 className="weather-title"> Meteo di {city}: </h1>
-        {weather && getCondition(weather)}
-        <h1 className="weather-title"> Temperatura: {temp}°</h1>
+      <Link to="/other-cities">Esplora altre città</Link>
+      
+      <div className="weather-card" style={{ maxWidth: '500px', margin: '40px auto' }}>
+        <span style={{ color: '#00d4ff', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.8rem' }}>Posizione Attuale</span>
+        <h1 className="weather-title">{CITY}</h1>
+        <p style={{ opacity: 0.8 }}>{data.current.condition.text}</p>
+        
+        {getConditionIcon(data.current.condition.code)}
+        
+        <div className="temp-display">{Math.round(data.current.temp_c)}°C</div>
+
         <div className="weather-details">
-          <h3 className="weather-data"> Umidità: {humidity}%</h3>
-          <h3 className="weather-data"> Vento: {wind}km/h</h3>
-          <h3 className="weather-data"> Indice UV: {UV}</h3>
-          <h3 className="weather-data"> Qualità Aria: {aqi && getAQI(aqi)}</h3>
+          <div className="weather-data">
+            <span><Droplets size={14}/> Umidità</span>
+            <strong>{data.current.humidity}%</strong>
+          </div>
+          <div className="weather-data">
+            <span><Wind size={14}/> Vento</span>
+            <strong>{data.current.wind_kph} km/h</strong>
+          </div>
+          <div className="weather-data">
+            <span><Zap size={14}/> Indice UV</span>
+            <strong>{data.current.uv}</strong>
+          </div>
+          <div className="weather-data">
+            <span><Activity size={14}/> Qualità Aria</span>
+            <strong>Livello {data.current.air_quality["us-epa-index"]}</strong>
+          </div>
         </div>
       </div>
     </div>
