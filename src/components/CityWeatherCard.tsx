@@ -24,46 +24,50 @@ const CityWeatherCard = ({ nomeCitta }: CityCardProps) => {
   }, [nomeCitta]);
 
   function getConditionIcon(code: number) {
-    const props = { className: "weather-icon" };
-    if (code === 1000) return <Sun {...props} color="#FFD700" />;
-    if (code === 1003) return <CloudSun {...props} color="#F0E68C" />;
-    if ([1006, 1009, 1030].includes(code)) return <Cloudy {...props} color="#B0C4DE" />;
-    if ([1063, 1183, 1189, 1240].includes(code)) return <CloudRain {...props} color="#00BFFF" />;
-    return <Snowflake {...props} color="#AFEEEE" />;
+    const props = { className: "weather-icon", size: 64 };
+    if (code === 1000) return <Sun {...props} color="#fbbf24" />;
+    if (code === 1003) return <CloudSun {...props} color="#fcd34d" />;
+    if ([1006, 1009, 1030].includes(code)) return <Cloudy {...props} color="#94a3b8" />;
+    if ([1063, 1183, 1189, 1240].includes(code)) return <CloudRain {...props} color="#38bdf8" />;
+    return <Snowflake {...props} color="#bae6fd" />;
   }
 
   const getAQIDesc = (val: number) => {
-    const map: any = { 1: "Ottima", 2: "Moderata", 3: "Bassa", 4: "Mala", 5: "Pessima", 6: "Rischio" };
+    const map: any = { 1: "Ottima", 2: "Buona", 3: "Moderata", 4: "Bassa", 5: "Pessima", 6: "Critica" };
     return map[val] || "N/D";
   };
 
-  if (!data) return <div className="weather-card">Caricamento...</div>;
+  if (!data) return <div className="weather-card" style={{opacity: 0.5}}>Caricamento...</div>;
 
   return (
     <div className="weather-card">
       <h3 className="weather-title">{nomeCitta}</h3>
-      <p style={{ opacity: 0.7, fontSize: '0.9rem', marginBottom: '10px' }}>{data.current.condition.text}</p>
+      <span className="condition-label">{data.current.condition.text}</span>
       
-      {getConditionIcon(data.current.condition.code)}
+      <div style={{ margin: '20px 0' }}>
+        {getConditionIcon(data.current.condition.code)}
+      </div>
       
       <div className="temp-display">{Math.round(data.current.temp_c)}°</div>
 
       <div className="weather-details">
         <div className="weather-data">
-          <span><Droplets size={12}/> Umidità</span>
+          <span><Droplets size={14}/> Umidità</span>
           <strong>{data.current.humidity}%</strong>
         </div>
         <div className="weather-data">
-          <span><Wind size={12}/> Vento</span>
-          <strong>{Math.round(data.current.wind_kph)} km/h</strong>
+          <span><Wind size={14}/> Vento</span>
+          <strong>{Math.round(data.current.wind_kph)} <small>km/h</small></strong>
         </div>
         <div className="weather-data">
-          <span><Zap size={12}/> Indice UV</span>
+          <span><Zap size={14}/> Indice UV</span>
           <strong>{data.current.uv}</strong>
         </div>
         <div className="weather-data">
-          <span><Activity size={12}/> Aria</span>
-          <strong>{getAQIDesc(data.current.air_quality["us-epa-index"])}</strong>
+          <span><Activity size={14}/> Aria</span>
+          <strong style={{ color: data.current.air_quality["us-epa-index"] <= 2 ? '#4ade80' : '#f87171' }}>
+            {getAQIDesc(data.current.air_quality["us-epa-index"])}
+          </strong>
         </div>
       </div>
     </div>

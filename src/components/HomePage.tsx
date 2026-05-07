@@ -31,16 +31,31 @@ export const HomePage = () => {
     return <Snowflake {...props} color="#AFEEEE" />;
   }
 
+  // Funzione uniformata per la descrizione della qualità dell'aria
+  const getAQIDesc = (val: number) => {
+    const map: any = { 
+      1: "Ottima", 
+      2: "Buona", 
+      3: "Moderata", 
+      4: "Bassa", 
+      5: "Pessima", 
+      6: "Critica" 
+    };
+    return map[val] || "N/D";
+  };
+
   if (!data) return <div className="weather-container">Caricamento meteo...</div>;
+
+  const aqiIndex = data.current.air_quality["us-epa-index"];
 
   return (
     <div className="weather-container">
       <Link to="/other-cities">Esplora altre città</Link>
       
       <div className="weather-card" style={{ maxWidth: '500px', margin: '40px auto' }}>
-        <span style={{ color: '#00d4ff', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.8rem' }}>Posizione Attuale</span>
+        <span style={{ color: '#38bdf8', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.8rem' }}>Posizione Attuale</span>
         <h1 className="weather-title">{CITY}</h1>
-        <p style={{ opacity: 0.8 }}>{data.current.condition.text}</p>
+        <p style={{ opacity: 0.8, marginBottom: '10px' }}>{data.current.condition.text}</p>
         
         {getConditionIcon(data.current.condition.code)}
         
@@ -60,8 +75,10 @@ export const HomePage = () => {
             <strong>{data.current.uv}</strong>
           </div>
           <div className="weather-data">
-            <span><Activity size={14}/> Qualità Aria</span>
-            <strong>Livello {data.current.air_quality["us-epa-index"]}</strong>
+            <span><Activity size={14}/> Aria</span>
+            <strong style={{ color: aqiIndex <= 2 ? '#4ade80' : '#f87171' }}>
+              {getAQIDesc(aqiIndex)}
+            </strong>
           </div>
         </div>
       </div>
